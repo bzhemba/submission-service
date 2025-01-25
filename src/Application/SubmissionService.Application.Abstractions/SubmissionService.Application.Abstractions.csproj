@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\SubmissionService.Application.Contracts\SubmissionService.Application.Contracts.csproj" />
+        <ProjectReference Include="..\SubmissionService.Application.Models\SubmissionService.Application.Models.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SourceKit.Generators.Builder"/>
+    </ItemGroup>
+
+</Project>

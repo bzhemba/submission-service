@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Application\SubmissionService.Application\SubmissionService.Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\SubmissionService.Infrastructure.Persistence\SubmissionService.Infrastructure.Persistence.csproj"/>
+        <ProjectReference Include="..\Presentation\SubmissionService.Presentation.Grpc\SubmissionService.Presentation.Grpc.csproj"/>
+        <ProjectReference Include="..\Presentation\SubmissionService.Presentation.Http\SubmissionService.Presentation.Http.csproj" />
+        <ProjectReference Include="..\Presentation\SubmissionService.Presentation.Kafka\SubmissionService.Presentation.Kafka.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
+        <PackageReference Include="Itmo.Dev.Platform.MessagePersistence.Postgres" />
+        <PackageReference Include="Itmo.Dev.Platform.Observability" />
+        <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Hangfire.Postgres" />
+        <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks.Postgres" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.*.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+    </ItemGroup>
+
+</Project>

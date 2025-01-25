@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\SubmissionService.Application.Abstractions\SubmissionService.Application.Abstractions.csproj"/>
+        <ProjectReference Include="..\SubmissionService.Application.Contracts\SubmissionService.Application.Contracts.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.BackgroundTasks"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    </ItemGroup>
+
+</Project>

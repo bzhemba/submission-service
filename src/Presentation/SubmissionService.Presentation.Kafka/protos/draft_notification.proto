@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package applications;
+
+option csharp_namespace = "SubmissionService.Kafka.Contracts";
+
+import "google/protobuf/timestamp.proto";
+
+message DraftNotificationKey {
+  int64 application_id = 1;
+}
+
+message DraftNotificationValue {
+    int64 application_id = 1;
+    int64 user_id = 2;
+    google.protobuf.Timestamp created_at = 3;
+}

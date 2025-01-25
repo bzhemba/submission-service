@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\SubmissionService.Application.Abstractions\SubmissionService.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Application\SubmissionService.Application.Contracts\SubmissionService.Application.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

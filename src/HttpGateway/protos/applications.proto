@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package applications;
+
+option csharp_namespace = "ApplicationService";
+
+import "google/protobuf/wrappers.proto";
+
+service ApplicationService {
+  rpc SendApplication(SendApplicationRequest) returns (SendApplicationResponse);
+  rpc CancelApplication(CancelApplicationRequest) returns (CancelApplicationResponse);
+  rpc EditApplication(EditApplicationRequest) returns (EditApplicationResponse);
+  rpc CreateApplication(CreateApplicationRequest) returns (CreateApplicationResponse);
+}
+
+
+message SendApplicationRequest {
+  int64 application_id = 1;
+}
+
+message SendApplicationResponse {
+}
+
+
+message ApproveApplicationRequest {
+  int64 application_id = 1;
+}
+
+message ApproveApplicationResponse {
+}
+
+
+message CancelApplicationRequest {
+  int64 application_id = 1;
+}
+
+message CancelApplicationResponse {
+}
+
+
+message EditApplicationRequest {
+  int64 application_id = 1;
+  ActivityType activity = 2;
+  google.protobuf.StringValue title = 3;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.StringValue outline = 5;
+}
+
+message EditApplicationResponse {
+}
+
+
+message CreateApplicationRequest {
+  int64 user_id = 1;
+  ActivityType activity = 2;
+  google.protobuf.StringValue title = 3;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.StringValue outline = 5;
+}
+
+message CreateApplicationResponse {
+  int64 application_id = 1;
+}
+
+enum ActivityType {
+  ACTIVITY_TYPE_UNSPECIFIED = 0;
+  ACTIVITY_TYPE_LECTURE = 1;
+  ACTIVITY_TYPE_WORKSHOP = 2;
+  ACTIVITY_TYPE_DISCUSSION = 3;
+}
