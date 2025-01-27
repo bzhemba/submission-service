@@ -20,7 +20,10 @@ public class ApplicationController : ApplicationService.ApplicationService.Appli
         ServerCallContext context)
     {
         var applicationCommand = new CreateApplication.Request(
-            request.UserId,
+            request.EventId,
+            request.UserEmail,
+            request.StartedAt.ToDateTimeOffset(),
+            request.FinishedAt.ToDateTimeOffset(),
             Convert(request.Activity),
             request.Title,
             request.Description,
@@ -53,6 +56,9 @@ public class ApplicationController : ApplicationService.ApplicationService.Appli
             Application.Contracts.Applications.Operations.SendApplication.Result.ApplicationNotFound => throw new
                 RpcException(
                     new Status(StatusCode.NotFound, $"Application not found.")),
+            Application.Contracts.Applications.Operations.SendApplication.Result.MissingRequiredFields => throw new
+                RpcException(
+                    new Status(StatusCode.InvalidArgument, "Missing required fields.")),
             Application.Contracts.Applications.Operations.SendApplication.Result.Success =>
                 new SendApplicationResponse(),
             _ => throw new RpcException(new Status(StatusCode.Cancelled, "Unable to send application.")),
@@ -65,6 +71,8 @@ public class ApplicationController : ApplicationService.ApplicationService.Appli
     {
         var applicationCommand = new EditApplication.Request(
             request.ApplicationId,
+            request.StartedAt.ToDateTimeOffset(),
+            request.FinishedAt.ToDateTimeOffset(),
             Convert(request.Activity),
             request.Title,
             request.Description,
@@ -79,7 +87,8 @@ public class ApplicationController : ApplicationService.ApplicationService.Appli
             Application.Contracts.Applications.Operations.EditApplication.Result.MissingRequiredFields => throw new
                 RpcException(
                     new Status(StatusCode.InvalidArgument, "Missing required fields.")),
-            Application.Contracts.Applications.Operations.EditApplication.Result.Success => new EditApplicationResponse(),
+            Application.Contracts.Applications.Operations.EditApplication.Result.Success =>
+                new EditApplicationResponse(),
             Application.Contracts.Applications.Operations.EditApplication.Result.ApplicationNotFound => throw new
                 RpcException(
                     new Status(StatusCode.NotFound, $"Application not found.")),
@@ -97,11 +106,34 @@ public class ApplicationController : ApplicationService.ApplicationService.Appli
             = await _applicationService.CancelAsync(applicationCommand, context.CancellationToken);
         return response switch
         {
-            Application.Contracts.Applications.Operations.CancelApplication.Result.Success => new CancelApplicationResponse(),
+            Application.Contracts.Applications.Operations.CancelApplication.Result.Success =>
+                new CancelApplicationResponse(),
             Application.Contracts.Applications.Operations.CancelApplication.Result.InvalidState => throw new
                 RpcException(
                     new Status(StatusCode.Unavailable, $"Canceling application available only in 'Draft' state.")),
             Application.Contracts.Applications.Operations.CancelApplication.Result.ApplicationNotFound => throw new
+                RpcException(
+                    new Status(StatusCode.NotFound, $"Application not found.")),
+            _ => throw new RpcException(new Status(StatusCode.Cancelled, "Unable to edit application.")),
+        };
+    }
+
+    public override async Task<ApproveApplicationResponse> ApproveApplication(
+        ApproveApplicationRequest request,
+        ServerCallContext context)
+    {
+        var applicationCommand = new ApproveApplication.Request(
+            request.ApplicationId);
+        ApproveApplication.Result response
+            = await _applicationService.ApproveAsync(applicationCommand, context.CancellationToken);
+        return response switch
+        {
+            Application.Contracts.Applications.Operations.ApproveApplication.Result.Success =>
+                new ApproveApplicationResponse(),
+            Application.Contracts.Applications.Operations.ApproveApplication.Result.InvalidState => throw new
+                RpcException(
+                    new Status(StatusCode.Unavailable, $"Canceling application available only in 'Draft' state.")),
+            Application.Contracts.Applications.Operations.ApproveApplication.Result.ApplicationNotFound => throw new
                 RpcException(
                     new Status(StatusCode.NotFound, $"Application not found.")),
             _ => throw new RpcException(new Status(StatusCode.Cancelled, "Unable to edit application.")),

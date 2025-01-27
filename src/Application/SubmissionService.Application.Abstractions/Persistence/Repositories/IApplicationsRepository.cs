@@ -10,7 +10,7 @@ public interface IApplicationsRepository
         GetApplicationByIdQuery query,
         CancellationToken cancellationToken);
 
-    Task<ApplicationModel?> GetDraftByUserIdAsync(long userId, CancellationToken cancellationToken);
+    Task<ApplicationModel?> GetDraftByUserEmailAsync(string userEmail, CancellationToken cancellationToken);
 
     IAsyncEnumerable<ApplicationModel> GetExpiredDraftsAsync(CancellationToken cancellationToken);
 

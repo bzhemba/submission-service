@@ -5,7 +5,10 @@ namespace SubmissionService.Application.Contracts.Applications.Operations;
 public static class CreateApplication
 {
     public readonly record struct Request(
-        long UserId,
+        long EventId,
+        string UserEmail,
+        DateTimeOffset StartedAt,
+        DateTimeOffset FinishedAt,
         ActivityType? Activity,
         string? Title,
         string? Description,

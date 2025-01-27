@@ -27,13 +27,16 @@ public class Initial : SqlMigration
 
         CREATE TABLE applications (
             id bigint primary key NOT NULL generated always as identity,
-            user_id bigint NOT NULL,
+            event_id bigint NOT NULL,
+            user_email TEXT NOT NULL,
+            activity_started_at timestamp with time zone NOT NULL,
+            activity_finished_at timestamp with time zone NOT NULL,
             title TEXT,
             activity activity_type,
             description TEXT,
             outline TEXT,
-            created_at timestamp with time zone ,
-            application_state application_state
+            application_state application_state,
+            created_at timestamp with time zone
         );
         """;
 

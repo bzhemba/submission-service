@@ -5,10 +5,12 @@ package applications;
 option csharp_namespace = "ApplicationService";
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
 
 service ApplicationService {
   rpc SendApplication(SendApplicationRequest) returns (SendApplicationResponse);
   rpc CancelApplication(CancelApplicationRequest) returns (CancelApplicationResponse);
+  rpc ApproveApplication(ApproveApplicationRequest) returns (ApproveApplicationResponse);
   rpc EditApplication(EditApplicationRequest) returns (EditApplicationResponse);
   rpc CreateApplication(CreateApplicationRequest) returns (CreateApplicationResponse);
 }
@@ -40,10 +42,12 @@ message CancelApplicationResponse {
 
 message EditApplicationRequest {
   int64 application_id = 1;
-  ActivityType activity = 2;
-  google.protobuf.StringValue title = 3;
-  google.protobuf.StringValue description = 4;
-  google.protobuf.StringValue outline = 5;
+  google.protobuf.Timestamp started_at = 2;
+  google.protobuf.Timestamp finished_at = 3;
+  ActivityType activity = 4;
+  google.protobuf.StringValue title = 5;
+  google.protobuf.StringValue description = 6;
+  google.protobuf.StringValue outline = 7;
 }
 
 message EditApplicationResponse {
@@ -51,12 +55,16 @@ message EditApplicationResponse {
 
 
 message CreateApplicationRequest {
-  int64 user_id = 1;
-  ActivityType activity = 2;
-  google.protobuf.StringValue title = 3;
-  google.protobuf.StringValue description = 4;
-  google.protobuf.StringValue outline = 5;
+  int64 event_id = 1;
+  string user_email = 2;
+  google.protobuf.Timestamp started_at = 3;
+  google.protobuf.Timestamp finished_at = 4;
+  ActivityType activity = 5;
+  google.protobuf.StringValue title = 6;
+  google.protobuf.StringValue description = 7;
+  google.protobuf.StringValue outline = 8;
 }
+
 
 message CreateApplicationResponse {
   int64 application_id = 1;

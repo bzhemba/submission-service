@@ -12,18 +12,25 @@ public class ApplicationGrpcService
         _applicationServiceClient = applicationServiceClient;
     }
 
-    public async Task<CreateApplicationResponse> CreateApplicationAsync(CreateApplicationRequest request, CancellationToken cancellationToken)
+    public async Task<CreateApplicationResponse> CreateApplicationAsync(
+        CreateApplicationRequest request,
+        CancellationToken cancellationToken)
     {
         var grpcRequest = new CreateApplicationRequest()
         {
-            UserId = request.UserId,
+            EventId = request.EventId,
+            UserEmail = request.UserEmail,
+            StartedAt = request.StartedAt,
+            FinishedAt = request.FinishedAt,
             Activity = request.Activity,
             Title = request.Title,
             Description = request.Description,
             Outline = request.Outline,
         };
 
-        return await _applicationServiceClient.CreateApplicationAsync(grpcRequest, cancellationToken: cancellationToken);
+        return await _applicationServiceClient.CreateApplicationAsync(
+            grpcRequest,
+            cancellationToken: cancellationToken);
     }
 
     public async Task CancelApplicationAsync(long applicationId, CancellationToken cancellationToken)
@@ -36,11 +43,23 @@ public class ApplicationGrpcService
         await _applicationServiceClient.CancelApplicationAsync(grpcRequest, cancellationToken: cancellationToken);
     }
 
+    public async Task ApproveApplicationAsync(long applicationId, CancellationToken cancellationToken)
+    {
+        var grpcRequest = new ApproveApplicationRequest()
+        {
+            ApplicationId = applicationId,
+        };
+
+        await _applicationServiceClient.ApproveApplicationAsync(grpcRequest, cancellationToken: cancellationToken);
+    }
+
     public async Task EditApplicationAsync(EditApplicationRequest request, CancellationToken cancellationToken)
     {
         var grpcRequest = new EditApplicationRequest()
         {
             ApplicationId = request.ApplicationId,
+            StartedAt = request.StartedAt,
+            FinishedAt = request.FinishedAt,
             Activity = request.Activity,
             Title = request.Title,
             Description = request.Description,

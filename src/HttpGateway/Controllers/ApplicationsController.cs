@@ -3,6 +3,7 @@ using HttpGateway.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HttpGateway.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class ApplicationsController : ControllerBase
@@ -23,8 +24,9 @@ public class ApplicationsController : ControllerBase
         [FromBody] CreateApplicationRequest createApplication,
         CancellationToken cancellationToken)
     {
-         CreateApplicationResponse response = await _service.CreateApplicationAsync(createApplication, cancellationToken);
-         return Ok(response);
+        CreateApplicationResponse
+            response = await _service.CreateApplicationAsync(createApplication, cancellationToken);
+        return Ok(response);
     }
 
     [HttpPut]
@@ -41,6 +43,19 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPut]
+    [Route("/application/approve")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> ApproveApplication(
+        [FromBody] long applicationId,
+        CancellationToken cancellationToken)
+    {
+        await _service.ApproveApplicationAsync(applicationId, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut]
     [Route("/application/edit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,9 +64,9 @@ public class ApplicationsController : ControllerBase
         EditApplicationRequest editApplication,
         CancellationToken cancellationToken)
     {
-         await _service.EditApplicationAsync(editApplication, cancellationToken);
+        await _service.EditApplicationAsync(editApplication, cancellationToken);
 
-         return Ok();
+        return Ok();
     }
 
     [HttpPut]
@@ -63,8 +78,8 @@ public class ApplicationsController : ControllerBase
         long applicationId,
         CancellationToken cancellationToken)
     {
-         await _service.SendApplicationAsync(applicationId, cancellationToken);
+        await _service.SendApplicationAsync(applicationId, cancellationToken);
 
-         return Ok();
+        return Ok();
     }
 }

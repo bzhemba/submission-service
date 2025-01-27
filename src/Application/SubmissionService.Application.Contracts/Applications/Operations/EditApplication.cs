@@ -6,6 +6,8 @@ public static class EditApplication
 {
     public readonly record struct Request(
         long ApplicationId,
+        DateTimeOffset? StartedAt,
+        DateTimeOffset? FinishedAt,
         ActivityType? Activity,
         string? Title,
         string? Description,

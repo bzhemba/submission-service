@@ -22,7 +22,7 @@ internal class ApplicationService : IApplicationService
         CancellationToken cancellationToken)
     {
         ApplicationModel? application = await _context.Applications
-            .GetDraftByUserIdAsync(request.UserId, cancellationToken);
+            .GetDraftByUserEmailAsync(request.UserEmail, cancellationToken);
 
         if (application is not null)
             return new CreateApplication.Result.DraftAlreadyExists();
@@ -36,12 +36,15 @@ internal class ApplicationService : IApplicationService
         }
 
         var command = new CreateApplicationCommand(
-            request.UserId,
+            request.EventId,
+            request.UserEmail,
+            request.StartedAt,
+            request.FinishedAt,
             request.Activity,
             request.Title,
             request.Description,
             request.Outline,
-            DateTime.UtcNow);
+            DateTimeOffset.UtcNow);
 
         long applicationId = await _context.Applications.CreateAsync(command, cancellationToken);
 
@@ -60,6 +63,14 @@ internal class ApplicationService : IApplicationService
 
         if (application is null)
             return new SendApplication.Result.ApplicationNotFound();
+
+        if (application.Activity == null ||
+            string.IsNullOrWhiteSpace(application.Title) ||
+            string.IsNullOrWhiteSpace(application.UserEmail) ||
+            string.IsNullOrWhiteSpace(application.Outline))
+        {
+            return new SendApplication.Result.MissingRequiredFields();
+        }
 
         await _context.Applications.ChangeStatusAsync(
             request.ApplicationId,
@@ -99,7 +110,7 @@ internal class ApplicationService : IApplicationService
     {
         var applicationQuery = new GetApplicationByIdQuery(request.ApplicationId);
 
-        Models.Applications.ApplicationModel? application = await _context.Applications
+        ApplicationModel? application = await _context.Applications
             .GetByIdAsync(applicationQuery, cancellationToken)
             .SingleOrDefaultAsync(cancellationToken);
 
@@ -108,7 +119,7 @@ internal class ApplicationService : IApplicationService
 
         await _context.Applications.ChangeStatusAsync(
             request.ApplicationId,
-            ApplicationState.Cancelled,
+            ApplicationState.Approved,
             cancellationToken);
 
         return new ApproveApplication.Result.Success();
@@ -146,6 +157,8 @@ internal class ApplicationService : IApplicationService
 
         var command = UpdateApplicationCommand.Build(builder => builder
             .WithId(request.ApplicationId)
+            .WithStartedAt(request.StartedAt ?? application.StartedAt)
+            .WithFinishedAt(request.FinishedAt ?? application.FinishedAt)
             .WithActivity(request.Activity ?? application.Activity)
             .WithTitle(request.Title ?? application.Title)
             .WithDescription(request.Description ?? application.Description)

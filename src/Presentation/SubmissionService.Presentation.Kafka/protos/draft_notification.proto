@@ -12,6 +12,6 @@ message DraftNotificationKey {
 
 message DraftNotificationValue {
     int64 application_id = 1;
-    int64 user_id = 2;
+    string user_email = 2;
     google.protobuf.Timestamp created_at = 3;
 }

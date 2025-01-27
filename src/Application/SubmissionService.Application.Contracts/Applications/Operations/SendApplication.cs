@@ -10,6 +10,8 @@ public static class SendApplication
 
         public sealed record Success : Result;
 
+        public sealed record MissingRequiredFields : Result;
+
         public sealed record ApplicationNotFound : Result;
     }
 }
