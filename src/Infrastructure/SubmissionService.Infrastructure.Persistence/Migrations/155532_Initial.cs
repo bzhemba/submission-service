@@ -3,7 +3,7 @@ using Itmo.Dev.Platform.Persistence.Postgres.Migrations;
 
 namespace SubmissionService.Infrastructure.Persistence.Migrations;
 
-[Migration(1, "initial")]
+[Migration(155532, "initial")]
 #pragma warning disable SA1649
 public class Initial : SqlMigration
 #pragma warning restore SA1649
